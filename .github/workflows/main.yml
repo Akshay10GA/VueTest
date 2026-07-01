@@ -37,6 +37,11 @@ jobs:
         working-directory: ./src-capacitor
         run: npx cap sync ios
 
+      - name: Patch @capacitor/app AppPlugin.swift (call.reject bug)
+        run: |
+          sed -i '' 's/call\.reject("Unable to get App Info")/call.resolve(["error": "Unable to get App Info"])/' \
+            src-capacitor/node_modules/@capacitor/app/ios/Sources/AppPlugin/AppPlugin.swift
+
       - name: Build iOS Simulator App
         run: |
           xcodebuild \
