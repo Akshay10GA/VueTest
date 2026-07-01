@@ -32,16 +32,22 @@ jobs:
         working-directory: ./src-capacitor
         run: npx cap sync ios
 
+      - name: Install CocoaPods
+        working-directory: ./src-capacitor/ios
+        run: |
+          pod install --repo-update
+
       - name: Build iOS Simulator App
         run: |
           xcodebuild \
-            -project src-capacitor/ios/App/App.xcodeproj \
+            -workspace src-capacitor/ios/App/App.xcworkspace \
             -scheme App \
             -sdk iphonesimulator \
             -configuration Debug \
             -derivedDataPath build \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            build
 
       - name: Compress App Bundle
         working-directory: build/Build/Products/Debug-iphonesimulator
