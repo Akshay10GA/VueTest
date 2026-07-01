@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Web App
         run: |
-          npx quasar build -m capacitor
+          npx quasar build -m capacitor -T ios --skip-pkg
 
       - name: Install Capacitor Dependencies
         run: |
