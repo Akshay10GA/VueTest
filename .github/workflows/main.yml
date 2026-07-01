@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Web App
         run: |
-          npm run build
+          npx quasar build -m capacitor
 
       - name: Install Capacitor Dependencies
         run: |
@@ -33,6 +33,7 @@ jobs:
 
       - name: Sync Web Code with Capacitor iOS
         run: |
+          cd src-capacitor
           npx cap sync ios
 
       - name: Build iOS App for Simulator (No Signing Needed)
