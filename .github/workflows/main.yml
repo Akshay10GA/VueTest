@@ -39,7 +39,7 @@ jobs:
       - name: Build iOS App for Simulator (No Signing Needed)
         run: |
           xcodebuild \
-            -workspace src-capacitor/ios/App/App.xcworkspace \
+            -project src-capacitor/ios/App/App.xcodeproj \
             -scheme App \
             -sdk iphonesimulator \
             -configuration Debug \
