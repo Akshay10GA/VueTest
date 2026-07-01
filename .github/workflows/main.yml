@@ -40,7 +40,7 @@ jobs:
       - name: Build iOS Simulator App
         run: |
           xcodebuild \
-            -workspace src-capacitor/ios/App/App.xcworkspace \
+            -project src-capacitor/ios/App/App.xcodeproj \
             -scheme App \
             -sdk iphonesimulator \
             -configuration Debug \
