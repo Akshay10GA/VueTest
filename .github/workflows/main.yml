@@ -37,11 +37,6 @@ jobs:
         working-directory: ./src-capacitor
         run: npx cap sync ios
 
-      - name: Install CocoaPods
-        working-directory: ./src-capacitor/ios
-        run: |
-          pod install --repo-update
-
       - name: Build iOS Simulator App
         run: |
           xcodebuild \
