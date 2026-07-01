@@ -1,0 +1,58 @@
+name: Build iOS Simulator App
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch: # Allows you to trigger the build manually from the GitHub UI
+
+jobs:
+  build:
+    runs-on: macos-14 # Runs on GitHub's Apple Silicon (M1/M2) macOS environment
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Project Dependencies
+        run: |
+          npm ci
+
+      - name: Build Web App
+        run: |
+          npm run build
+
+      - name: Install Capacitor Dependencies
+        run: |
+          cd src-capacitor
+          npm ci
+
+      - name: Sync Web Code with Capacitor iOS
+        run: |
+          npx cap sync ios
+
+      - name: Build iOS App for Simulator (No Signing Needed)
+        run: |
+          xcodebuild \
+            -workspace src-capacitor/ios/App/App.xcworkspace \
+            -scheme App \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            -derivedDataPath build \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Compress App Bundle
+        run: |
+          cd build/Build/Products/Debug-iphonesimulator
+          zip -r App.zip App.app
+
+      - name: Upload Zip to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: appetize-ios-simulator-build
+          path: build/Build/Products/Debug-iphonesimulator/App.zip
